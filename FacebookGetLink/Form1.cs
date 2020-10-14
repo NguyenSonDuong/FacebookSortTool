@@ -176,6 +176,7 @@ namespace FacebookGetLink
         private void ComplateLoadingProcess()
         {
             isComplete = true;
+            MessageBox.Show("Hoàn tất load dữ liệu");
         }
         private String GetTextOFFormat(String text, String regex)
         {
