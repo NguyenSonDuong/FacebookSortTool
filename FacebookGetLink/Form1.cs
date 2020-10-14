@@ -47,7 +47,7 @@ namespace FacebookGetLink
                 add.ShowDialog();
                 try
                 {
-                    if(String.IsNullOrEmpty(add.cookie))
+                    if(String.IsNullOrEmpty(add.cookie) && String.IsNullOrEmpty(add.token))
                     {
                         MessageBox.Show("Vui lòng nhập lại");
                         add.ShowDialog();
@@ -313,6 +313,13 @@ namespace FacebookGetLink
                 }
 
             });
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            File.Delete(FacebookAction.PATH_COOKIE);
+            File.Delete(FacebookAction.PATH_TOKEN);
+            Application.Exit();
         }
     }
     

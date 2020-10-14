@@ -119,8 +119,6 @@ namespace FacebookGetLink
             {
                 this.cookie = cookie;
                 this.accesstoken = token;
-                if (String.IsNullOrEmpty(cookie))
-                    throw new Exception("Lỗi vui lòng nhập cookie");
                 if (String.IsNullOrEmpty(token) && !String.IsNullOrEmpty(cookie))
                 {
                     token = UpdateToken("");
