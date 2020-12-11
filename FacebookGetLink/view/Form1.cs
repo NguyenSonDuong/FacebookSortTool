@@ -1,5 +1,6 @@
 ﻿using FacebookGetLink.ControllerAction;
 using FacebookGetLink.model;
+using FacebookGetLink.model.reponsive;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -10,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -25,6 +27,7 @@ namespace FacebookGetLink
         
         public static String[] HEADER_TABLE_GROUPS = { "ID", "Tên nhóm", "Số lượng thành viên", "Trạng thái quản trị", "Thời gian tạo nhóm" };
         public static String[] HEADER_TABLE_POSTCOMENT = { "ID comments", "Nội dung comments", "Chuỗi tìm kiếm", "Thời gian comments"};
+        public static String[] HEADER_TABLE_POSTGROUPS = { "ID Post", "Nội dung post", "Chuỗi tìm kiếm", "Thời gian post" };
         public static bool isSelect = false;
         public static string pattern = @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?";
         public bool isComplete = false;
@@ -38,6 +41,7 @@ namespace FacebookGetLink
             face = new FacebookAction();
             face.ProcessLoading += ProcessLoadingEvent;
             face.ComplateLoading += ComplateLoadingProcess;
+            face.ErrorLoading += Face_ErrorLoading;
             try
             {
                 face.GetTokenCookieForFile();
@@ -56,37 +60,22 @@ namespace FacebookGetLink
                 }
                 catch(Exception e)
                 {
-                    MessageBox.Show("Quá trình lấy token lỗi vui lòng cập nhật thủ công ở trình duyệt");
-                    Process.Start(face.URL_GET_TOKEN);
                     Application.Exit();
                 }
                 
             }
             InitializeComponent();
         }
-        private void Form1_Load(object sender, EventArgs e)
-        {
 
+        private void Face_ErrorLoading(string message)
+        {
+            isComplete = true;
+            MessageBox.Show("Lỗi: " + message);
         }
+        
         private void button1_Click(object sender, EventArgs e)
         {
-            dataViewTable.Columns.Clear();
-            CreateCollumTable(HEADER_TABLE_GROUPS);
-            ThreadCustom.StartThread(() =>
-            {
-                isComplete = false;
-                String url = "";
-                url = face.GetUrl(FacebookAction.KEY_GROUPS_USER);
-                try
-                {
-                    face.GetGroupsUser(url);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi quá trình lấy comments: " + ex.Message);
-                }
-
-            });
+            
 
         }
         public void CreateCollumTable(String[] data)
@@ -102,29 +91,8 @@ namespace FacebookGetLink
         
         private void button2_Click(object sender, EventArgs e)
         {
-            textFormat = tbFormat.Text;
-            String textID = tbIDPost.Text;
-            if(String.IsNullOrEmpty(textFormat) || String.IsNullOrEmpty(textID))
-            {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin");
-            }
-            CreateCollumTable(HEADER_TABLE_POSTCOMENT);
-            ThreadCustom.StartThread(() =>
-            {
-                isComplete = false;
-                String url = "";
-                url = face.GetUrl(textID+FacebookAction.KEY_GROUPS_POST_COMMENTS);
-                try
-                {
-                    face.GetPostComments(url);
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show("Lỗi quá trình lấy comments: " + ex.Message);
-                }
-                
-            });
             
+
         }
         private void ProcessLoadingEvent(Object obj, Object obj2)
         {
@@ -168,8 +136,35 @@ namespace FacebookGetLink
                     });
                 });
             }
-            else {
-
+            else if(obj.Equals(FacebookAction.POST)){
+                CustomInvoker.RunInvoker(dataViewTable, (sender) =>
+                {
+                    DataGridView data = sender as DataGridView;
+                    ObjectGroupsPost.Post groups = obj2 as ObjectGroupsPost.Post;
+                    foreach (ObjectGroupsPost.Datum item in groups.data)
+                    {
+                        countCommentsLoad++;
+                        String stringOutFormat = GetTextOFFormat(item.message, textFormat);
+                        data.Rows.Add(item.id,  item.message, stringOutFormat, item.created_time);
+                    }
+                    CustomInvoker.RunInvoker(lbStatus, (sen) =>
+                    {
+                        lbStatus.Text = countCommentsLoad + " Groups loader";
+                    });
+                });
+            }
+            else if (obj.Equals(FacebookAction.REACIONS))
+            {
+                CustomInvoker.RunInvoker(dataViewTable, (sender) =>
+                {
+                    DataGridView data = sender as DataGridView;
+                    ReponsiveReactions.Rootobject reaction = obj2 as ReponsiveReactions.Rootobject;
+                    
+                    CustomInvoker.RunInvoker(lbStatus, (sen) =>
+                    {
+                        lbStatus.Text = countCommentsLoad + " Groups loader";
+                    });
+                });
             }
         }
 
@@ -180,6 +175,10 @@ namespace FacebookGetLink
         }
         private String GetTextOFFormat(String text, String regex)
         {
+            if (String.IsNullOrEmpty(text))
+            {
+                return "";
+            }
             StringBuilder output = new StringBuilder();
             try
             {
@@ -204,20 +203,11 @@ namespace FacebookGetLink
             }
             catch(Exception ex)
             {
-                throw ex;
+                return "";
             }
         }
         
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            String id = dataViewTable.SelectedRows[0].Cells[0].Value.ToString();
-        }
         
-        private void dataViewTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
         private void ExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (isComplete)
@@ -229,7 +219,7 @@ namespace FacebookGetLink
                     ThreadCustom.StartThread(() => {
                         try
                         {
-                            ExportExcel(save.FileName);
+                            Controller.ExportExcel(dataViewTable,save.FileName);
                             MessageBox.Show("Lưu thành công file");
                             try
                             {
@@ -249,48 +239,9 @@ namespace FacebookGetLink
             }
         }
 
-        public void ExportExcel(String path)
-        {
-                ExcelPackage excel = new ExcelPackage();
-                try
-                {
-                    excel.Workbook.Properties.Title = "Danh sách comment";
-                    excel.Workbook.Worksheets.Add("Danh Sach link");
+        
 
-                    ExcelWorksheet es = excel.Workbook.Worksheets[1];
-                    es.Name = "Comments";
-                    int row = 1;
-                    int cou = 1;
-                    foreach (DataGridViewTextBoxColumn item in dataViewTable.Columns)
-                    {
-                        es.Cells[1, cou].Value = item.HeaderCell.Value;
-                        es.Cells[1, cou].Style.Font.Size = 14;
-                        es.Cells[1, cou].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                        es.Cells[1, cou].Style.Font.Color.SetColor(Color.Red);
-                        cou++;
-                    }
-                    row++;
-                    for (int j = 0; j < dataViewTable.RowCount; j++)
-                    {
-                        cou = 1;
-                        foreach (DataGridViewTextBoxColumn item in dataViewTable.Columns)
-                        {
-                            es.Cells[row, cou].Value = dataViewTable.Rows[j].Cells[cou - 1].Value;
-                            cou++;
-                        }
-                        row++;
-
-                    }
-                    byte[] by = excel.GetAsByteArray();
-                    File.WriteAllBytes(path, by);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-
-        private void button3_Click_1(object sender, EventArgs e)
+        private void bunifuButton3_Click(object sender, EventArgs e)
         {
             textFormat = tbFormmatGroups.Text;
             String textID = tbIDGroups.Text;
@@ -298,7 +249,8 @@ namespace FacebookGetLink
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin");
             }
-            CreateCollumTable(HEADER_TABLE_POSTCOMENT);
+            dataViewTable.Columns.Clear();
+            CreateCollumTable(HEADER_TABLE_POSTGROUPS);
             ThreadCustom.StartThread(() =>
             {
                 isComplete = false;
@@ -316,11 +268,105 @@ namespace FacebookGetLink
             });
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void bunifuButton4_Click(object sender, EventArgs e)
         {
+            textFormat = tbFormat.Text;
+            String textID = tbIDPost.Text;
+            if (String.IsNullOrEmpty(textFormat) || String.IsNullOrEmpty(textID))
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin");
+            }
+            dataViewTable.Columns.Clear();
+            CreateCollumTable(HEADER_TABLE_POSTCOMENT);
+            isComplete = false;
+            Controller.SearchCommnets(face, textFormat, textID,
+                (mess) =>
+                {
+                    MessageBox.Show("Lỗi lấy comments: " + mess);
+                });
+        }
+
+        private void bunifuButton5_Click(object sender, EventArgs e)
+        {
+            dataViewTable.Columns.Clear();
+            CreateCollumTable(HEADER_TABLE_GROUPS);
+            isComplete = false;
+            Controller.GetGroupsOfUser(face,
+                (mess) => {
+                    MessageBox.Show("Lỗi quá trình lấy thong tin Groups: " + mess);
+                });
+        }
+
+        private void bunifuButton6_Click(object sender, EventArgs e)
+        {
+            File.Delete(FacebookAction.PATH_COOKIE);
             File.Delete(FacebookAction.PATH_COOKIE);
             File.Delete(FacebookAction.PATH_TOKEN);
             Application.Exit();
+        }
+
+        private void bunifuButton7_Click(object sender, EventArgs e)
+        {
+            ThreadCustom.StartThread(() =>
+            {
+                face.UpdateToken("");
+            });
+        }
+        
+
+        private void bunifuButton2_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void bunifuButton1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void bunifuButton8_Click(object sender, EventArgs e)
+        {
+            dataViewTable.Columns.Clear();
+            CreateCollumTable(HEADER_TABLE_GROUPS);
+            isComplete = false;
+            
+        }
+
+        private void tbFormmatGroups_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //String firstMacAddress = NetworkInterface
+            //                .GetAllNetworkInterfaces()
+            //                .Where(nic => nic.OperationalStatus == OperationalStatus.Up && nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+            //                .Select(nic => nic.GetPhysicalAddress().ToString())
+            //                .FirstOrDefault();
+            //HttpRequest http = RequestCustom.GetRequets("", "");
+            //try
+            //{
+            //    String data = http.Post("https://apipixivcustom.herokuapp.com/api/v1/active/active", "deviceID=" + firstMacAddress, "application/x-www-form-urlencoded").ToString();
+            //    if (data.Equals("ok"))
+            //    {
+            //    }
+            //    else
+            //    {
+            //        //String sign = http.Post("https://apipixivcustom.herokuapp.com/api/v1/active/SignActive", "deviceID=" + firstMacAddress, "application/x-www-form-urlencoded").ToString();
+            //        //if (sign.Equals("ok"))
+            //        //{
+
+            //        //}
+            //        MessageBox.Show("Ứng dụng chưa được active vui lòng active");
+            //        Application.Exit();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Active Fail");
+            //    Application.Exit();
+            //}
         }
     }
     

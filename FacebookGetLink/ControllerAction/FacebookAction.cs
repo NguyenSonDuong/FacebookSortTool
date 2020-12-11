@@ -1,5 +1,7 @@
 ﻿using FacebookGetLink.ControllerAction;
 using FacebookGetLink.model;
+using FacebookGetLink.model.bodyvariable;
+using FacebookGetLink.model.reponsive;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,17 +15,19 @@ namespace FacebookGetLink
 {
     public delegate void ProcessHandler(object obj, object data);
     public delegate void CompleteHandler();
-    class FacebookAction
+    public delegate void CompleteRetrurnHandler(object value);
+    public class FacebookAction
     {
         #region
         public static String COMMENTS = "1";
         public static String POST = "2";
-        public static String GROUPS = "2";
+        public static String GROUPS = "3";
+        public static String REACIONS = "4";
         #endregion
 
         #region Khai báo const Parameter
         public const String KEY_GROUPS_USER = "me/groups?fields=administrator,created_time,id,name,member_count&limit=100";
-        public const String KEY_GROUPS_POST = "feed?fields=message,id,created_time&limit=100";
+        public const String KEY_GROUPS_POST = "/feed?fields=message,id,created_time&limit=100";
         public const String KEY_GROUPS_POST_COMMENTS = "/comments?fields=message,id,created_time&limit=100";
         public const String KEY_REACTIONS_HAHA = "?fields=reactions.type(HAHA).limit(0).summary(total_count)";
         public const String KEY_REACTIONS = "?fields=reactions.summary(total_count)";
@@ -35,6 +39,30 @@ namespace FacebookGetLink
 
         private event ProcessHandler processLoading;
         private event CompleteHandler complateLoading;
+        private event ErrorHandler errorLoding;
+        private event CompleteRetrurnHandler completeReturn;
+        public event CompleteRetrurnHandler CompleteReturn
+        {
+            add
+            {
+                this.completeReturn += value;
+            }
+            remove
+            {
+                this.completeReturn -= value;
+            }
+        }
+        public event ErrorHandler ErrorLoading
+        {
+            add
+            {
+                this.errorLoding += value;
+            }
+            remove
+            {
+                this.errorLoding -= value;
+            }
+        }
         public event CompleteHandler ComplateLoading
         {
             add
@@ -61,11 +89,16 @@ namespace FacebookGetLink
         #region Khai báo const Link
         public String URL_GET_TOKEN = "https://m.facebook.com/composer/ocelot/async_loader/?publisher=feed";
         public String HOST = "https://graph.facebook.com/v6.0/";
+        public String URL_GRAPH = "https://www.facebook.com/api/graphql/";
+
         #endregion
 
         #region Khai báo biến Thuộc tính getter setter
         private string accesstoken;
         private string cookie;
+        private String fb_dtsg = "";
+        private String id;
+        private String username;
 
         public string Accesstoken
         {
@@ -89,6 +122,42 @@ namespace FacebookGetLink
             set
             {
                 cookie = value;
+            }
+        }
+        public string Fb_dtsg
+        {
+            get
+            {
+                return fb_dtsg;
+            }
+
+            set
+            {
+                fb_dtsg = value;
+            }
+        }
+        public string Id
+        {
+            get
+            {
+                return id;
+            }
+
+            set
+            {
+                id = value;
+            }
+        }
+        public string Username
+        {
+            get
+            {
+                return username;
+            }
+
+            set
+            {
+                username = value;
             }
         }
         #endregion
@@ -132,7 +201,6 @@ namespace FacebookGetLink
                 throw ex;
             }
         }
-
         public void GetGroupsUser(string url)
         {
             HttpRequest http = RequestCustom.GetRequets("","");
@@ -152,19 +220,46 @@ namespace FacebookGetLink
                     }
                 else
                 {
-                    if (complateLoading != null)
-                        complateLoading();
+                    if (errorLoding != null)
+                        errorLoding("Token có thể đã bị lỗi vui lòng thửu lại");
                 }
                     
             }
             catch (Exception ex)
             {
-                if (complateLoading != null)
-                    complateLoading();
+                if (errorLoding != null)
+                    errorLoding(ex.Message);
                 throw ex;
             }
         }
-        
+        public void GetReaction(String feedbackID, String cursor, String reactionType)
+        {
+            try
+            {
+                String body = BodyReaction(feedbackID, 30, cursor, reactionType);
+                HttpRequest http = RequestCustom.GetRequets(cookie, "");
+                String output = http.Post(URL_GRAPH, body, "").ToString();
+                ReponsiveReactions.Rootobject reponsive = JsonConvert.DeserializeObject<ReponsiveReactions.Rootobject>(output);
+                processLoading(FacebookAction.REACIONS, reponsive);
+                if (reponsive.data.node.reactors.page_info != null && reponsive.data.node.reactors.page_info.has_next_page)
+                        GetReaction(feedbackID, reponsive.data.node.reactors.page_info.end_cursor, reactionType);
+            }catch(Exception ex)
+            {
+                errorLoding(ex.Message);
+            }
+        }
+        public String BodyReaction(String feedbackID, int count, String cursor,String reactionType)
+        {
+            ReactionsVariable variable = new ReactionsVariable();
+            variable.count = count;
+            variable.cursor = cursor;
+            variable.feedbackTargetID = feedbackID;
+            variable.id = feedbackID;
+            variable.scale = 1;
+            variable.reactionType = reactionType;
+            String body = "__user=100025221310339" + Id+ "&__a=1&fb_dtsg=AQERJf3IN5Fe:AQE3JbSRFpxN" + fb_dtsg + "&variables="+JsonConvert.SerializeObject(variable) +"&server_timestamps=true&doc_id=3528946720499433";
+            return body;
+        }
         public void GetPostComments(string url)
         {
             HttpRequest http = RequestCustom.GetRequets("", "");
@@ -184,14 +279,14 @@ namespace FacebookGetLink
                     }
                 else
                 {
-                    if (complateLoading != null)
-                        complateLoading();
+                    if (errorLoding != null)
+                        errorLoding("Token có thể đã lỗi vui lòng lấy lại");
                 }
             }
             catch (Exception ex)
             {
-                if (complateLoading != null)
-                    complateLoading();
+                if (errorLoding != null)
+                    errorLoding(ex.Message);
                 throw ex;
             }
         }
@@ -214,18 +309,17 @@ namespace FacebookGetLink
                     }
                 else
                 {
-                    if (complateLoading != null)
-                        complateLoading();
+                    if (errorLoding != null)
+                        errorLoding("Token có thể đã lỗi vui lòng thử lại");
                 }
             }
             catch (Exception ex)
             {
-                if (complateLoading != null)
-                    complateLoading();
+                if (errorLoding != null)
+                    errorLoding(ex.Message);
                 throw ex;
             }
         }
-
         public String UpdateToken( String user_agent)
         {
             if (string.IsNullOrEmpty(this.cookie))
@@ -246,6 +340,7 @@ namespace FacebookGetLink
                     int start = dataAccessToken.IndexOf("EAAA");
                     int end = dataAccessToken.IndexOf(endString);
                     String t = dataAccessToken.Substring(start, end - start);
+                    accesstoken = t;
                     return t;
                 }
                 else
@@ -258,6 +353,18 @@ namespace FacebookGetLink
                 throw ex;
             }
 
+        }
+        public static void GetCookie(String username, String password)
+        {
+            String url = "https://mbasic.facebook.com/login/device-based/regular/login/?refsrc=https%3A%2F%2Fmbasic.facebook.com%2F&lwv=100&ref=dbl";
+            String body = "lsd=AVpFPQboc4o&jazoest=2965&m_ts=1602739649&li=wd2HX-Giuclk1-hjGTVzUu46&try_number=0&unrecognized_tries=0&email=hunterdemon9x99&pass=NguyenDuong130999&login=%C4%90%C4%83ng+nh%E1%BA%ADp";
+            HttpRequest http = RequestCustom.GetRequets("", Http.FirefoxUserAgent());
+            http.AddHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+            http.Referer = "https://mbasic.facebook.com/login/?next&ref=dbl&fl&refid=8";
+            HttpResponse output = http.Post(url, body, "application/x-www-form-urlencoded");
+            CookieDictionary cookie = output.Cookies;
+            String a = "";
+            Console.WriteLine(""); 
         }
         #endregion
 

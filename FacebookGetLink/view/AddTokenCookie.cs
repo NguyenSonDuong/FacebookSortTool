@@ -22,14 +22,7 @@ namespace FacebookGetLink
 
         private void button1_Click(object sender, EventArgs e)
         {
-            cookie = textBox1.Text;
-            token = textBox2.Text;
-            if (String.IsNullOrEmpty(token) && String.IsNullOrEmpty(cookie))
-            {
-                MessageBox.Show("Vui lòng nhập 1 trong 2 trường sau");
-                return;
-            }
-            this.Close();
+           
             
         }
 
@@ -39,6 +32,28 @@ namespace FacebookGetLink
             {
                 Application.Exit();
             }
+        }
+
+        private void bunifuButton1_Click(object sender, EventArgs e)
+        {
+            cookie = textBox1.Text;
+            token = textBox2.Text;
+            if (String.IsNullOrEmpty(token) && String.IsNullOrEmpty(cookie))
+            {
+                MessageBox.Show("Vui lòng nhập 1 trong 2 trường sau");
+                return;
+            }
+            this.Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bunifuButton3_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
