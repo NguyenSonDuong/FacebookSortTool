@@ -15,4 +15,10 @@ namespace FacebookGetLink.model.bodyvariable
         public int scale { get; set; }
         public string id { get; set; }
     }
+    public class RactionCount
+    {
+        public string feedbackTargetID { get; set; }
+        public string reactionType { get; set; }
+        public int scale { get; set; }
+    }
 }

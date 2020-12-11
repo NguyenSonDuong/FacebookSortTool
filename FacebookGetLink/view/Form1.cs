@@ -27,7 +27,7 @@ namespace FacebookGetLink
         
         public static String[] HEADER_TABLE_GROUPS = { "ID", "Tên nhóm", "Số lượng thành viên", "Trạng thái quản trị", "Thời gian tạo nhóm" };
         public static String[] HEADER_TABLE_POSTCOMENT = { "ID comments", "Nội dung comments", "Chuỗi tìm kiếm", "Thời gian comments"};
-        public static String[] HEADER_TABLE_POSTGROUPS = { "ID Post", "Nội dung post", "Chuỗi tìm kiếm", "Thời gian post" };
+        public static String[] HEADER_TABLE_POSTGROUPS = { "ID Post", "Nội dung post", "Chuỗi tìm kiếm", "Thời gian post","LIKE","LOVE","HAHA","CARE","WOW","SAD","ANGRY","COUNT REACTION" };
         public static bool isSelect = false;
         public static string pattern = @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?";
         public bool isComplete = false;
@@ -35,7 +35,8 @@ namespace FacebookGetLink
         private bool isRegex;
         public String textFormat;
         public int countCommentsLoad = 0;
-
+        private bool isAddColum = false;
+        Random rad = new Random();
         public Form1()
         {
             face = new FacebookAction();
@@ -94,7 +95,7 @@ namespace FacebookGetLink
             
 
         }
-        private void ProcessLoadingEvent(Object obj, Object obj2)
+        private async void ProcessLoadingEvent(Object obj, Object obj2)
         {
             if (obj.Equals(FacebookAction.COMMENTS))
             {
@@ -143,13 +144,57 @@ namespace FacebookGetLink
                     ObjectGroupsPost.Post groups = obj2 as ObjectGroupsPost.Post;
                     foreach (ObjectGroupsPost.Datum item in groups.data)
                     {
-                        countCommentsLoad++;
+                        
                         String stringOutFormat = GetTextOFFormat(item.message, textFormat);
-                        data.Rows.Add(item.id,  item.message, stringOutFormat, item.created_time);
+                        if (String.IsNullOrEmpty(stringOutFormat))
+                            continue;
+                        ReactionCount.Top_Reactions countReaction = face.GetReactionCount(item.id.Split('_').Length > 1 ? item.id.Split('_')[1] : "", "NONE");
+                        if (countReaction == null)
+                        {
+                            return;
+                        }
+                        countCommentsLoad++;
+                        item.reaction = countReaction;
+                        List<String> dataRows = new List<string>();
+                        dataRows.Add(item.id);
+                        dataRows.Add(item.message);
+                        dataRows.Add(stringOutFormat);
+                        dataRows.Add(item.created_time.ToShortDateString());
+                        dataRows.Add("0");
+                        dataRows.Add("0");
+                        dataRows.Add("0");
+                        dataRows.Add("0");
+                        dataRows.Add("0");
+                        dataRows.Add("0");
+                        dataRows.Add("0");
+                        dataRows.Add("0");
+                        int count = 0;
+                        for (int i = 0; i < item.reaction.count; i++)
+                        {
+                            if(item.reaction.summary[i].reaction.reaction_type.Equals("LIKE"))
+                                dataRows[4]= item.reaction.summary[i].reaction_count+"";
+                            if (item.reaction.summary[i].reaction.reaction_type.Equals("LOVE"))
+                                dataRows[5] = item.reaction.summary[i].reaction_count + "";
+                            if (item.reaction.summary[i].reaction.reaction_type.Equals("HAHA"))
+                                dataRows[6] = item.reaction.summary[i].reaction_count + "";
+                            if (item.reaction.summary[i].reaction.reaction_type.Equals("SUPPORT"))
+                                dataRows[7] = item.reaction.summary[i].reaction_count + "";
+                            if (item.reaction.summary[i].reaction.reaction_type.Equals("WOW"))
+                                dataRows[8] = item.reaction.summary[i].reaction_count + "";
+                            if (item.reaction.summary[i].reaction.reaction_type.Equals("SORRY"))
+                                dataRows[9] = item.reaction.summary[i].reaction_count + "";
+                            if (item.reaction.summary[i].reaction.reaction_type.Equals("ANGER"))
+                                dataRows[10] = item.reaction.summary[i].reaction_count + "";
+                            count += item.reaction.summary[i].reaction_count;
+                        }
+                        dataRows[11] = count + "";
+                        data.Rows.Add(dataRows.ToArray());
+                        Thread.Sleep(rad.Next(100, 1000));
+                        
                     }
                     CustomInvoker.RunInvoker(lbStatus, (sen) =>
                     {
-                        lbStatus.Text = countCommentsLoad + " Groups loader";
+                        lbStatus.Text = countCommentsLoad + " Post loader";
                     });
                 });
             }
@@ -167,7 +212,6 @@ namespace FacebookGetLink
                 });
             }
         }
-
         private void ComplateLoadingProcess()
         {
             isComplete = true;

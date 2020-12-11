@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FacebookGetLink.model.reponsive;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,7 @@ namespace FacebookGetLink.model
             public string full_picture { get; set; }
             public string picture { get; set; }
             public DateTime created_time { get; set; }
+            public ReactionCount.Top_Reactions reaction { get; set; }
         }
 
     }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using xNet;
 
@@ -27,7 +28,7 @@ namespace FacebookGetLink
 
         #region Khai báo const Parameter
         public const String KEY_GROUPS_USER = "me/groups?fields=administrator,created_time,id,name,member_count&limit=100";
-        public const String KEY_GROUPS_POST = "/feed?fields=message,id,created_time&limit=100";
+        public const String KEY_GROUPS_POST = "/feed?fields=message,id,created_time&limit=25";
         public const String KEY_GROUPS_POST_COMMENTS = "/comments?fields=message,id,created_time&limit=100";
         public const String KEY_REACTIONS_HAHA = "?fields=reactions.type(HAHA).limit(0).summary(total_count)";
         public const String KEY_REACTIONS = "?fields=reactions.summary(total_count)";
@@ -167,7 +168,16 @@ namespace FacebookGetLink
         {
             return  HOST + para + "&access_token=" + Accesstoken;
         }
-        
+
+        public String GetFbDtsgFromContent(String dataAccessToken)
+        {
+            dataAccessToken = dataAccessToken.Replace("\\", "").Replace(" ","");
+            string pattern = "name=\"fb_dtsg\"value=\"[a-zA-Z0-9-_:]+\"";
+            string patGetFBDTSG = @"""[a-zA-Z0-9-_:]+""";
+            Match fb = Regex.Match(dataAccessToken, pattern);
+            String fb_dtsg = Regex.Matches(fb.Value, patGetFBDTSG)[1].Value;
+            return fb_dtsg.Replace('"', ' ').Trim();
+        }
         public void GetTokenCookieForFile()
         {
             try
@@ -232,20 +242,30 @@ namespace FacebookGetLink
                 throw ex;
             }
         }
-        public void GetReaction(String feedbackID, String cursor, String reactionType)
+        public string Base64Encode(string plainText)
         {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+        public ReactionCount.Top_Reactions GetReactionCount(String ID, String reactionType)
+        {
+            if(String.IsNullOrEmpty(ID) || String.IsNullOrEmpty(fb_dtsg))
+            {
+                errorLoding("Dữ liệu chưa cập nhật đầy đủ (ID,FB_DTSG), vui lòng cập nhật lại cookie,");
+                return null;
+            }
             try
             {
-                String body = BodyReaction(feedbackID, 30, cursor, reactionType);
-                HttpRequest http = RequestCustom.GetRequets(cookie, "");
-                String output = http.Post(URL_GRAPH, body, "").ToString();
-                ReponsiveReactions.Rootobject reponsive = JsonConvert.DeserializeObject<ReponsiveReactions.Rootobject>(output);
-                processLoading(FacebookAction.REACIONS, reponsive);
-                if (reponsive.data.node.reactors.page_info != null && reponsive.data.node.reactors.page_info.has_next_page)
-                        GetReaction(feedbackID, reponsive.data.node.reactors.page_info.end_cursor, reactionType);
-            }catch(Exception ex)
+                String body = BodyReaction(Base64Encode("feedback:"+ID),  reactionType);
+                HttpRequest http = RequestCustom.GetRequets(cookie, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36");
+                String output = http.Post(URL_GRAPH, body, "application/x-www-form-urlencoded").ToString(); 
+                ReactionCount.Rootobject reponsive = JsonConvert.DeserializeObject<ReactionCount.Rootobject>(output);
+                return reponsive.data.node.top_reactions;
+            }
+            catch(Exception ex)
             {
                 errorLoding(ex.Message);
+                return null;
             }
         }
         public String BodyReaction(String feedbackID, int count, String cursor,String reactionType)
@@ -257,7 +277,16 @@ namespace FacebookGetLink
             variable.id = feedbackID;
             variable.scale = 1;
             variable.reactionType = reactionType;
-            String body = "__user=100025221310339" + Id+ "&__a=1&fb_dtsg=AQERJf3IN5Fe:AQE3JbSRFpxN" + fb_dtsg + "&variables="+JsonConvert.SerializeObject(variable) +"&server_timestamps=true&doc_id=3528946720499433";
+            String body = "__user=" + Id+ "&__a=1&fb_dtsg=" + fb_dtsg + "&variables="+JsonConvert.SerializeObject(variable) + "&server_timestamps=true&doc_id=3785345958187365";
+            return body;
+        }
+        public String BodyReaction(String feedbackID,  String reactionType)
+        {
+            RactionCount variable = new RactionCount();
+            variable.feedbackTargetID = feedbackID;
+            variable.scale = 1;
+            variable.reactionType = reactionType;
+            String body = "av="+Id+"__user=" + Id + "&__a=1&fb_dtsg=" + fb_dtsg + "&variables=" + JsonConvert.SerializeObject(variable) + "&server_timestamps=true&doc_id=3785345958187365";
             return body;
         }
         public void GetPostComments(string url)
@@ -297,6 +326,7 @@ namespace FacebookGetLink
             {
                 string reponsive = http.Get(url).ToString();
                 ObjectGroupsPost.Post groups = JsonConvert.DeserializeObject<ObjectGroupsPost.Post>(reponsive);
+                
                 if (processLoading != null)
                     processLoading(FacebookAction.POST, groups);
                 if (groups.paging != null)
@@ -317,8 +347,24 @@ namespace FacebookGetLink
             {
                 if (errorLoding != null)
                     errorLoding(ex.Message);
-                throw ex;
             }
+        }
+        public String GetID( string cookie)
+        {
+            var temp = cookie.Split(';');
+            foreach (var item in temp)
+            {
+                var temp2 = item.Trim().Split('=');
+                if (temp2.Length > 1)
+                {
+                    if (temp2[0].Equals("c_user"))
+                    {
+                        return temp2[1];
+                    }
+
+                }
+            }
+            return null;
         }
         public String UpdateToken( String user_agent)
         {
@@ -341,6 +387,8 @@ namespace FacebookGetLink
                     int end = dataAccessToken.IndexOf(endString);
                     String t = dataAccessToken.Substring(start, end - start);
                     accesstoken = t;
+                    this.fb_dtsg = GetFbDtsgFromContent(dataAccessToken);
+                    this.id = GetID(Cookie);
                     return t;
                 }
                 else

@@ -29,9 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             Bunifu.UI.WinForms.BunifuButton.BunifuButton.BorderEdges borderEdges7 = new Bunifu.UI.WinForms.BunifuButton.BunifuButton.BorderEdges();
             Bunifu.UI.WinForms.BunifuButton.BunifuButton.BorderEdges borderEdges8 = new Bunifu.UI.WinForms.BunifuButton.BunifuButton.BorderEdges();
             Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties stateProperties17 = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties();
@@ -65,7 +62,6 @@
             this.ExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tunghisauContenmenu = new System.Windows.Forms.ToolStripMenuItem();
             this.label6 = new System.Windows.Forms.Label();
-            this.dataViewTable = new Bunifu.UI.WinForms.BunifuDataGridView();
             this.lbStatus = new System.Windows.Forms.Label();
             this.bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(this.components);
             this.panel7 = new System.Windows.Forms.Panel();
@@ -96,9 +92,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.dataViewTable = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataViewTable)).BeginInit();
             this.panel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataViewTable)).BeginInit();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -132,70 +129,6 @@
             this.label6.Size = new System.Drawing.Size(97, 21);
             this.label6.TabIndex = 19;
             this.label6.Text = "Lọc bài viết";
-            // 
-            // dataViewTable
-            // 
-            this.dataViewTable.AllowCustomTheming = false;
-            this.dataViewTable.AllowUserToAddRows = false;
-            this.dataViewTable.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(251)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
-            this.dataViewTable.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataViewTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataViewTable.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
-            this.dataViewTable.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataViewTable.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.dataViewTable.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.DodgerBlue;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI Semibold", 11.75F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(115)))), ((int)(((byte)(204)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataViewTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.dataViewTable.ColumnHeadersHeight = 40;
-            this.dataViewTable.ContextMenuStrip = this.contextMenuStrip1;
-            this.dataViewTable.CurrentTheme.AlternatingRowsStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(251)))), ((int)(((byte)(255)))));
-            this.dataViewTable.CurrentTheme.AlternatingRowsStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.dataViewTable.CurrentTheme.AlternatingRowsStyle.ForeColor = System.Drawing.Color.Black;
-            this.dataViewTable.CurrentTheme.AlternatingRowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
-            this.dataViewTable.CurrentTheme.AlternatingRowsStyle.SelectionForeColor = System.Drawing.Color.Black;
-            this.dataViewTable.CurrentTheme.BackColor = System.Drawing.Color.White;
-            this.dataViewTable.CurrentTheme.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(238)))), ((int)(((byte)(255)))));
-            this.dataViewTable.CurrentTheme.HeaderStyle.BackColor = System.Drawing.Color.DodgerBlue;
-            this.dataViewTable.CurrentTheme.HeaderStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 11.75F, System.Drawing.FontStyle.Bold);
-            this.dataViewTable.CurrentTheme.HeaderStyle.ForeColor = System.Drawing.Color.White;
-            this.dataViewTable.CurrentTheme.HeaderStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(115)))), ((int)(((byte)(204)))));
-            this.dataViewTable.CurrentTheme.HeaderStyle.SelectionForeColor = System.Drawing.Color.White;
-            this.dataViewTable.CurrentTheme.Name = null;
-            this.dataViewTable.CurrentTheme.RowsStyle.BackColor = System.Drawing.Color.White;
-            this.dataViewTable.CurrentTheme.RowsStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.dataViewTable.CurrentTheme.RowsStyle.ForeColor = System.Drawing.Color.Black;
-            this.dataViewTable.CurrentTheme.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
-            this.dataViewTable.CurrentTheme.RowsStyle.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataViewTable.DefaultCellStyle = dataGridViewCellStyle3;
-            this.dataViewTable.EnableHeadersVisualStyles = false;
-            this.dataViewTable.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(238)))), ((int)(((byte)(255)))));
-            this.dataViewTable.HeaderBackColor = System.Drawing.Color.DodgerBlue;
-            this.dataViewTable.HeaderBgColor = System.Drawing.Color.Empty;
-            this.dataViewTable.HeaderForeColor = System.Drawing.Color.White;
-            this.dataViewTable.Location = new System.Drawing.Point(302, 82);
-            this.dataViewTable.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.dataViewTable.Name = "dataViewTable";
-            this.dataViewTable.RowHeadersVisible = false;
-            this.dataViewTable.RowTemplate.Height = 40;
-            this.dataViewTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataViewTable.Size = new System.Drawing.Size(980, 646);
-            this.dataViewTable.TabIndex = 19;
-            this.dataViewTable.Theme = Bunifu.UI.WinForms.BunifuDataGridView.PresetThemes.Light;
             // 
             // lbStatus
             // 
@@ -1294,11 +1227,20 @@
             this.label7.TabIndex = 46;
             this.label7.Text = "ID của Group/user/page muốn quét";
             // 
+            // dataViewTable
+            // 
+            this.dataViewTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataViewTable.Location = new System.Drawing.Point(290, 69);
+            this.dataViewTable.Name = "dataViewTable";
+            this.dataViewTable.Size = new System.Drawing.Size(982, 662);
+            this.dataViewTable.TabIndex = 47;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1306, 769);
+            this.Controls.Add(this.dataViewTable);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -1308,7 +1250,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.bunifuCustomLabel5);
             this.Controls.Add(this.tbIDPostReaction);
-            this.Controls.Add(this.dataViewTable);
             this.Controls.Add(this.lbStatus);
             this.Controls.Add(this.bunifuButton7);
             this.Controls.Add(this.bunifuButton6);
@@ -1334,9 +1275,9 @@
             this.Text = "Công cụ lọc dữ liệu facebook";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataViewTable)).EndInit();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataViewTable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1348,7 +1289,6 @@
         private System.Windows.Forms.ToolStripMenuItem ExcelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tunghisauContenmenu;
         private System.Windows.Forms.Label lbStatus;
-        private Bunifu.UI.WinForms.BunifuDataGridView dataViewTable;
         private Bunifu.Framework.UI.BunifuElipse bunifuElipse1;
         private Bunifu.UI.WinForms.BunifuButton.BunifuButton bunifuButton4;
         private System.Windows.Forms.Label label11;
@@ -1378,6 +1318,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridView dataViewTable;
     }
 }
 
