@@ -211,6 +211,33 @@ namespace FacebookGetLink
                 throw ex;
             }
         }
+        public String GetMessageID(String uid)
+        {
+            HttpRequest http = RequestCustom.GetRequets(cookie, Http.FirefoxUserAgent());
+            String output = http.Get("https://www.facebook.com/login/async_sso/" + uid + "/?__a=1").ToString();
+            string pattern = @"""lid"":""(\d+)""";
+            RegexOptions options = RegexOptions.Multiline;
+            return Regex.Match(output, pattern, options).Groups[1].Value;
+        }
+        public void SendMessage(String message, String uid)
+        {
+            if(String.IsNullOrEmpty(id) || String.IsNullOrEmpty(fb_dtsg))
+            {
+                throw new Exception("Lỗi thiếu dữ liệu trả về");
+            }
+            String messageID = GetMessageID(uid);
+            HttpRequest http = RequestCustom.GetRequets(cookie, Http.FirefoxUserAgent());
+            String body = "client=mercury&action_type=ma-type:user-generated-message&body=" + message + "&has_attachment=false&message_id=" + messageID + "&offline_threading_id=" + messageID + "&other_user_fbid=" + uid + "&source=source:chat:web&specific_to_list[0]=fbid:" + uid + "&specific_to_list[1]=fbid:" + id + "&timestamp=" + DateTime.Now.Ticks + "&__user="+id+"&__a=1&fb_dtsg="+fb_dtsg;
+            try
+            {
+                String senData = http.Post("https://www.facebook.com/messaging/send/", body, "application/x-www-form-urlencoded").ToString();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            
+        }
         public void GetGroupsUser(string url)
         {
             HttpRequest http = RequestCustom.GetRequets("","");

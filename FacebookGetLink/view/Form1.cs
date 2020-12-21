@@ -370,9 +370,11 @@ namespace FacebookGetLink
 
         private void bunifuButton8_Click(object sender, EventArgs e)
         {
-            dataViewTable.Columns.Clear();
-            CreateCollumTable(HEADER_TABLE_GROUPS);
-            isComplete = false;
+            String idUser = tbIdUserReceiver.Text;
+            String message = tbMessage.Text;
+            ThreadCustom.StartThread(() => {
+                face.SendMessage(message,idUser );
+            });
             
         }
 

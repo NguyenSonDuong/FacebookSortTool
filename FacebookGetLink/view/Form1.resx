@@ -127,6 +127,19 @@
     <value>35</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="tbMessage.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAOgAAAAdCAYAAACg9iDSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF9SURBVHhe7dyxSsNQFIDhO3b0ERwdfRJnH8HFZxF8Bl/B
+        tW3SpHbvYKcWoSI1BIkQQw0lnlMPSOjc3iP8H5yhSTr+XJLhBAD/yGg0us7zfDiZTIrxeNwxDHPc0dak
+        uSdp78YyPCQ3z/Sh+XxeFUXRNU3TATg+ba0sy26xWNRZlj1Li+eW5R+Nc7PZ2F8AxFBVVSctvkikA0sz
+        hDRNb6XeT3sGQETL5bKRSO8tz9/TU49YAPHVda3vpa+WZwhJkny1bWu3AcSmH48szxD0BwA/CBRwjEAB
+        xwgUcIxAAccIFHCMQAHHCBRwjEABxwgUcIxAAccIFHCMQAHHCBRwjEABx3qBJknS7nY7uwUgtl6guqhI
+        d6EAiG+73XZpmlaW5z7Qu9VqxUoFwAFd3pfn+aPluV+5OZBI31i1CcSlr5rT6fTjYPWmXLiUat/X6/U3
+        +4mA09IwdR/1bDYr5bC8siz7JFJdXv2gS8T0JZVhmNOMfqiV9obS4IXlCMC3EH4Ae9rotpKqnE4AAAAA
+        SUVORK5CYII=
+</value>
+  </data>
   <data name="bunifuButton8.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAOgAAAAlCAYAAABI36USAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -140,7 +153,7 @@
         DOM9ET9h5afEXqV/7QAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="tbIDPostReaction.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tbIdUserReceiver.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAOgAAAAdCAYAAACg9iDSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF9SURBVHhe7dyxSsNQFIDhO3b0ERwdfRJnH8HFZxF8Bl/B
