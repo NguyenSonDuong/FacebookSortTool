@@ -36,6 +36,7 @@ namespace FacebookGetLink
         public String textFormat;
         public int countCommentsLoad = 0;
         private bool isAddColum = false;
+        private Random rand = new Random();
         Random rad = new Random();
         public Form1()
         {
@@ -370,10 +371,28 @@ namespace FacebookGetLink
 
         private void bunifuButton8_Click(object sender, EventArgs e)
         {
+            String[] idUsers = null;
+            if(cbUser.Checked)
+            {
+                idUsers = tbIdUserReceiver.Text.Split('|');
+            }    
             String idUser = tbIdUserReceiver.Text;
             String message = tbMessage.Text;
             ThreadCustom.StartThread(() => {
-                face.SendMessage(message,idUser );
+                if (cbUser.Checked)
+                {
+                    foreach(String id in idUsers)
+                    {
+                        face.SendMessage(message, id);
+                        Thread.Sleep(rand.Next(500, 2000));
+                    }
+                }
+                else
+                {
+                    face.SendMessage(message , idUser);
+                    Thread.Sleep(1000);
+                }
+
             });
             
         }

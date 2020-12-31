@@ -80,3 +80,5 @@ D:\CShaphProject\FacebookSortTool\Facebook\FacebookGetLink\obj\Debug\FacebookGet
 D:\CShaphProject\FacebookSortTool\Facebook\FacebookGetLink\obj\Debug\FacebookGetLink.csproj.CopyComplete
 D:\CShaphProject\FacebookSortTool\Facebook\FacebookGetLink\obj\Debug\FacebookGetLink.exe
 D:\CShaphProject\FacebookSortTool\Facebook\FacebookGetLink\obj\Debug\FacebookGetLink.pdb
+D:\CShaphProject\FacebookSortTool\Facebook\FacebookGetLink\bin\Debug\Bunifu.UI.WinForms.BunifuCheckBox.dll
+D:\CShaphProject\FacebookSortTool\Facebook\FacebookGetLink\bin\Debug\Bunifu.UI.WinForms.BunifuCheckBox.xml

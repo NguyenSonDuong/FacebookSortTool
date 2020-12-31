@@ -57,11 +57,11 @@
             Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties stateProperties6 = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties();
             Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties stateProperties7 = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties();
             Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties stateProperties8 = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties stateProperties1 = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties();
             Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties stateProperties2 = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties();
             Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties stateProperties3 = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties();
             Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties stateProperties4 = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox.StateProperties();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tunghisauContenmenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,6 +99,8 @@
             this.dataViewTable = new System.Windows.Forms.DataGridView();
             this.bunifuCustomLabel7 = new Bunifu.Framework.UI.BunifuCustomLabel();
             this.tbMessage = new Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox();
+            this.cbUser = new Bunifu.UI.WinForms.BunifuCheckBox();
+            this.bunifuCustomLabel8 = new Bunifu.Framework.UI.BunifuCustomLabel();
             this.contextMenuStrip1.SuspendLayout();
             this.panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataViewTable)).BeginInit();
@@ -835,7 +837,7 @@
             this.bunifuButton5.IdleIconLeftImage = null;
             this.bunifuButton5.IdleIconRightImage = null;
             this.bunifuButton5.IndicateFocus = false;
-            this.bunifuButton5.Location = new System.Drawing.Point(29, 647);
+            this.bunifuButton5.Location = new System.Drawing.Point(29, 662);
             this.bunifuButton5.Name = "bunifuButton5";
             this.bunifuButton5.onHoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(181)))), ((int)(((byte)(255)))));
             this.bunifuButton5.onHoverState.BorderRadius = 10;
@@ -905,7 +907,7 @@
             this.bunifuButton6.IdleIconLeftImage = null;
             this.bunifuButton6.IdleIconRightImage = null;
             this.bunifuButton6.IndicateFocus = false;
-            this.bunifuButton6.Location = new System.Drawing.Point(29, 688);
+            this.bunifuButton6.Location = new System.Drawing.Point(29, 703);
             this.bunifuButton6.Name = "bunifuButton6";
             this.bunifuButton6.onHoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(181)))), ((int)(((byte)(255)))));
             this.bunifuButton6.onHoverState.BorderRadius = 10;
@@ -975,7 +977,7 @@
             this.bunifuButton7.IdleIconLeftImage = null;
             this.bunifuButton7.IdleIconRightImage = null;
             this.bunifuButton7.IndicateFocus = false;
-            this.bunifuButton7.Location = new System.Drawing.Point(29, 727);
+            this.bunifuButton7.Location = new System.Drawing.Point(29, 742);
             this.bunifuButton7.Name = "bunifuButton7";
             this.bunifuButton7.onHoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(181)))), ((int)(((byte)(255)))));
             this.bunifuButton7.onHoverState.BorderRadius = 10;
@@ -1052,7 +1054,7 @@
             this.bunifuButton8.IdleIconLeftImage = null;
             this.bunifuButton8.IdleIconRightImage = null;
             this.bunifuButton8.IndicateFocus = false;
-            this.bunifuButton8.Location = new System.Drawing.Point(30, 590);
+            this.bunifuButton8.Location = new System.Drawing.Point(29, 619);
             this.bunifuButton8.Name = "bunifuButton8";
             this.bunifuButton8.onHoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(181)))), ((int)(((byte)(255)))));
             this.bunifuButton8.onHoverState.BorderRadius = 10;
@@ -1183,7 +1185,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(560, 741);
+            this.label2.Location = new System.Drawing.Point(560, 758);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(314, 19);
             this.label2.TabIndex = 42;
@@ -1234,7 +1236,7 @@
             this.dataViewTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataViewTable.Location = new System.Drawing.Point(290, 69);
             this.dataViewTable.Name = "dataViewTable";
-            this.dataViewTable.Size = new System.Drawing.Size(982, 662);
+            this.dataViewTable.Size = new System.Drawing.Size(982, 686);
             this.dataViewTable.TabIndex = 47;
             // 
             // bunifuCustomLabel7
@@ -1320,11 +1322,76 @@
             this.tbMessage.UseSystemPasswordChar = false;
             this.tbMessage.WordWrap = true;
             // 
+            // cbUser
+            // 
+            this.cbUser.AllowBindingControlAnimation = true;
+            this.cbUser.AllowBindingControlColorChanges = false;
+            this.cbUser.AllowBindingControlLocation = true;
+            this.cbUser.AllowCheckBoxAnimation = false;
+            this.cbUser.AllowCheckmarkAnimation = true;
+            this.cbUser.AllowOnHoverStates = true;
+            this.cbUser.AutoCheck = true;
+            this.cbUser.BackColor = System.Drawing.Color.Transparent;
+            this.cbUser.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("cbUser.BackgroundImage")));
+            this.cbUser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.cbUser.BindingControl = null;
+            this.cbUser.BindingControlPosition = Bunifu.UI.WinForms.BunifuCheckBox.BindingControlPositions.Right;
+            this.cbUser.Checked = true;
+            this.cbUser.CheckState = Bunifu.UI.WinForms.BunifuCheckBox.CheckStates.Checked;
+            this.cbUser.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.cbUser.CustomCheckmarkImage = null;
+            this.cbUser.Location = new System.Drawing.Point(30, 590);
+            this.cbUser.MinimumSize = new System.Drawing.Size(17, 17);
+            this.cbUser.Name = "cbUser";
+            this.cbUser.OnCheck.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.cbUser.OnCheck.BorderRadius = 2;
+            this.cbUser.OnCheck.BorderThickness = 2;
+            this.cbUser.OnCheck.CheckBoxColor = System.Drawing.Color.DodgerBlue;
+            this.cbUser.OnCheck.CheckmarkColor = System.Drawing.Color.White;
+            this.cbUser.OnCheck.CheckmarkThickness = 2;
+            this.cbUser.OnDisable.BorderColor = System.Drawing.Color.LightGray;
+            this.cbUser.OnDisable.BorderRadius = 2;
+            this.cbUser.OnDisable.BorderThickness = 2;
+            this.cbUser.OnDisable.CheckBoxColor = System.Drawing.Color.Transparent;
+            this.cbUser.OnDisable.CheckmarkColor = System.Drawing.Color.LightGray;
+            this.cbUser.OnDisable.CheckmarkThickness = 2;
+            this.cbUser.OnHoverChecked.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(181)))), ((int)(((byte)(255)))));
+            this.cbUser.OnHoverChecked.BorderRadius = 2;
+            this.cbUser.OnHoverChecked.BorderThickness = 2;
+            this.cbUser.OnHoverChecked.CheckBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(181)))), ((int)(((byte)(255)))));
+            this.cbUser.OnHoverChecked.CheckmarkColor = System.Drawing.Color.White;
+            this.cbUser.OnHoverChecked.CheckmarkThickness = 2;
+            this.cbUser.OnHoverUnchecked.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(181)))), ((int)(((byte)(255)))));
+            this.cbUser.OnHoverUnchecked.BorderRadius = 2;
+            this.cbUser.OnHoverUnchecked.BorderThickness = 1;
+            this.cbUser.OnHoverUnchecked.CheckBoxColor = System.Drawing.Color.Transparent;
+            this.cbUser.OnUncheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(181)))), ((int)(((byte)(255)))));
+            this.cbUser.OnUncheck.BorderRadius = 2;
+            this.cbUser.OnUncheck.BorderThickness = 1;
+            this.cbUser.OnUncheck.CheckBoxColor = System.Drawing.Color.Transparent;
+            this.cbUser.Size = new System.Drawing.Size(21, 21);
+            this.cbUser.Style = Bunifu.UI.WinForms.BunifuCheckBox.CheckBoxStyles.Bunifu;
+            this.cbUser.TabIndex = 51;
+            this.cbUser.ThreeState = false;
+            this.cbUser.ToolTipText = null;
+            // 
+            // bunifuCustomLabel8
+            // 
+            this.bunifuCustomLabel8.AutoSize = true;
+            this.bunifuCustomLabel8.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bunifuCustomLabel8.Location = new System.Drawing.Point(52, 594);
+            this.bunifuCustomLabel8.Name = "bunifuCustomLabel8";
+            this.bunifuCustomLabel8.Size = new System.Drawing.Size(104, 13);
+            this.bunifuCustomLabel8.TabIndex = 52;
+            this.bunifuCustomLabel8.Text = "Nhiều người dùng";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1306, 769);
+            this.ClientSize = new System.Drawing.Size(1306, 786);
+            this.Controls.Add(this.bunifuCustomLabel8);
+            this.Controls.Add(this.cbUser);
             this.Controls.Add(this.bunifuCustomLabel7);
             this.Controls.Add(this.tbMessage);
             this.Controls.Add(this.dataViewTable);
@@ -1408,6 +1475,8 @@
         private System.Windows.Forms.DataGridView dataViewTable;
         private Bunifu.Framework.UI.BunifuCustomLabel bunifuCustomLabel7;
         private Bunifu.UI.WinForms.BunifuTextbox.BunifuTextBox tbMessage;
+        private Bunifu.Framework.UI.BunifuCustomLabel bunifuCustomLabel8;
+        private Bunifu.UI.WinForms.BunifuCheckBox cbUser;
     }
 }
 

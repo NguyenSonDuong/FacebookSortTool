@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using xNet;
 
@@ -225,7 +226,7 @@ namespace FacebookGetLink
             {
                 throw new Exception("Lỗi thiếu dữ liệu trả về");
             }
-            String messageID = "6911876743722588802";//GetMessageID(uid);
+            String messageID = GetMessageID(uid);
             HttpRequest http = RequestCustom.GetRequets(cookie, Http.FirefoxUserAgent());
             http.AddHeader("Referer", "https://www.facebook.com/");
             http.AddHeader("Origin","https://www.facebook.com");
@@ -237,7 +238,7 @@ namespace FacebookGetLink
             }
             catch(Exception ex)
             {
-                throw ex;
+                Thread.Sleep(2000);
             }
             
         }

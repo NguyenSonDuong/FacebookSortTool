@@ -127,6 +127,15 @@
     <value>35</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cbUser.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACISURBVDhPY6ApkJ//n0N2wr8M2f7/DeThfwXyU/5LQI0D
+        Gtj/XwBo4Hu5Cf//U4KBZnwHmmUANhTkQmyKSMITIbTshP8VEEOBzsdQRCYGmTVq6Kiho4ZiU0AOHjUU
+        1VB5NAWkYJheuKGgghVdEblYpv9/ANhQEJCZ+M8DZAslWGbCvwgGBgYGAAUX+zKpJV18AAAAAElFTkSu
+        QmCC
+</value>
+  </data>
   <data name="tbMessage.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAOgAAAAdCAYAAACg9iDSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
