@@ -27,7 +27,7 @@ namespace FacebookGetLink
         
         public static String[] HEADER_TABLE_GROUPS = { "ID", "Tên nhóm", "Số lượng thành viên", "Trạng thái quản trị", "Thời gian tạo nhóm" };
         public static String[] HEADER_TABLE_POSTCOMENT = { "ID comments", "Nội dung comments", "Chuỗi tìm kiếm", "Thời gian comments"};
-        public static String[] HEADER_TABLE_POSTGROUPS = { "ID Post", "Nội dung post", "Chuỗi tìm kiếm", "Thời gian post","LIKE","LOVE","HAHA","CARE","WOW","SAD","ANGRY","COUNT REACTION" };
+        public static String[] HEADER_TABLE_POSTGROUPS = { "ID Post", "Nội dung post", "Chuỗi tìm kiếm", "Thời gian post","COUNT REACTION" };
         public static bool isSelect = false;
         public static string pattern = @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?";
         public bool isComplete = false;
@@ -111,7 +111,6 @@ namespace FacebookGetLink
                         if (String.IsNullOrEmpty(stringOutFormat))
                             continue;
                         data.Rows.Add(item.id, item.message, stringOutFormat, item.created_time);
-                        
                     }
                     CustomInvoker.RunInvoker(lbStatus, (sen) =>
                     {
@@ -149,46 +148,14 @@ namespace FacebookGetLink
                         String stringOutFormat = GetTextOFFormat(item.message, textFormat);
                         if (String.IsNullOrEmpty(stringOutFormat))
                             continue;
-                        ReactionCount.Top_Reactions countReaction = face.GetReactionCount(item.id.Split('_').Length > 1 ? item.id.Split('_')[1] : "", "NONE");
-                        if (countReaction == null)
-                        {
-                            return;
-                        }
                         countCommentsLoad++;
-                        item.reaction = countReaction;
                         List<String> dataRows = new List<string>();
                         dataRows.Add(item.id);
                         dataRows.Add(item.message);
                         dataRows.Add(stringOutFormat);
                         dataRows.Add(item.created_time.ToShortDateString());
-                        dataRows.Add("0");
-                        dataRows.Add("0");
-                        dataRows.Add("0");
-                        dataRows.Add("0");
-                        dataRows.Add("0");
-                        dataRows.Add("0");
-                        dataRows.Add("0");
-                        dataRows.Add("0");
+                        dataRows.Add(item.reactions.summary.total_count+"");
                         int count = 0;
-                        for (int i = 0; i < item.reaction.count; i++)
-                        {
-                            if(item.reaction.summary[i].reaction.reaction_type.Equals("LIKE"))
-                                dataRows[4]= item.reaction.summary[i].reaction_count+"";
-                            if (item.reaction.summary[i].reaction.reaction_type.Equals("LOVE"))
-                                dataRows[5] = item.reaction.summary[i].reaction_count + "";
-                            if (item.reaction.summary[i].reaction.reaction_type.Equals("HAHA"))
-                                dataRows[6] = item.reaction.summary[i].reaction_count + "";
-                            if (item.reaction.summary[i].reaction.reaction_type.Equals("SUPPORT"))
-                                dataRows[7] = item.reaction.summary[i].reaction_count + "";
-                            if (item.reaction.summary[i].reaction.reaction_type.Equals("WOW"))
-                                dataRows[8] = item.reaction.summary[i].reaction_count + "";
-                            if (item.reaction.summary[i].reaction.reaction_type.Equals("SORRY"))
-                                dataRows[9] = item.reaction.summary[i].reaction_count + "";
-                            if (item.reaction.summary[i].reaction.reaction_type.Equals("ANGER"))
-                                dataRows[10] = item.reaction.summary[i].reaction_count + "";
-                            count += item.reaction.summary[i].reaction_count;
-                        }
-                        dataRows[11] = count + "";
                         data.Rows.Add(dataRows.ToArray());
                         Thread.Sleep(rad.Next(100, 1000));
                         
@@ -227,22 +194,19 @@ namespace FacebookGetLink
             StringBuilder output = new StringBuilder();
             try
             {
-                RegexOptions options = RegexOptions.Multiline;
-                MatchCollection maths = Regex.Matches(text,regex, options);
-                if(maths.Count <=0)
+                if (Regex.IsMatch(text.ToLower(), regex.ToLower()))
                 {
-                    return "";
-                }else if(maths.Count == 1)
-                {
-                    return maths[0].Value;
+                    RegexOptions options = RegexOptions.Multiline;
+                    MatchCollection maths = Regex.Matches(text.ToLower(), regex.ToLower(), options);
+                    foreach (Match m in maths)
+                    {
+                        output.Append(m.Groups[1].Value + "|");
+                    }
+                    return output.ToString();
                 }
                 else
                 {
-                    foreach (Match m in maths)
-                    {
-                        output.Append(m.Value + "|");
-                    }
-                    return output.ToString();
+                    return "";
                 }
                 
             }
@@ -289,10 +253,21 @@ namespace FacebookGetLink
         private void bunifuButton3_Click(object sender, EventArgs e)
         {
             textFormat = tbFormmatGroups.Text;
+            long timeStart = 0;
+            long timeEnd = 0;
+            int timeDelay = 3000;
+            if(!Int64.TryParse(txtTimeStart.Text, out timeStart) || !Int64.TryParse(txtTimeEnd.Text, out timeEnd))
+            {
+                MessageBox.Show("Vui Lòng nhập time phù hợp");
+                return;
+            }
+            Int32.TryParse(txtTimeEnd.Text,out timeDelay);
             String textID = tbIDGroups.Text;
+
             if (String.IsNullOrEmpty(textFormat) || String.IsNullOrEmpty(textID))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin");
+                return;
             }
             dataViewTable.Columns.Clear();
             CreateCollumTable(HEADER_TABLE_POSTGROUPS);
@@ -300,14 +275,15 @@ namespace FacebookGetLink
             {
                 isComplete = false;
                 String url = "";
-                url = face.GetUrl(textID + FacebookAction.KEY_GROUPS_POST);
+                url = face.GetUrl(textID + FacebookAction.KEY_GROUPS_POST.Replace("{%timestart%}",""+ timeStart).Replace("{%timeend%}", ""+ timeEnd));
                 try
                 {
-                    face.GetGroupPosts(url);
+                    face.GetGroupPosts(url, timeDelay);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Lỗi quá trình lấy comments: " + ex.Message);
+                    return;
                 }
 
             });
@@ -320,6 +296,7 @@ namespace FacebookGetLink
             if (String.IsNullOrEmpty(textFormat) || String.IsNullOrEmpty(textID))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin");
+                return;
             }
             dataViewTable.Columns.Clear();
             CreateCollumTable(HEADER_TABLE_POSTCOMENT);
@@ -328,6 +305,7 @@ namespace FacebookGetLink
                 (mess) =>
                 {
                     MessageBox.Show("Lỗi lấy comments: " + mess);
+                    return;
                 });
         }
 

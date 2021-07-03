@@ -29,7 +29,7 @@ namespace FacebookGetLink
 
         #region Khai báo const Parameter
         public const String KEY_GROUPS_USER = "me/groups?fields=administrator,created_time,id,name,member_count&limit=100";
-        public const String KEY_GROUPS_POST = "/feed?fields=message,id,created_time&limit=25";
+        public const String KEY_GROUPS_POST = "/feed?fields=message,id,created_time,reactions.summary(total_count)&limit=200&since={%timestart%}&until={%timeend%}";
         public const String KEY_GROUPS_POST_COMMENTS = "/comments?fields=message,id,created_time&limit=100";
         public const String KEY_REACTIONS_HAHA = "?fields=reactions.type(HAHA).limit(0).summary(total_count)";
         public const String KEY_REACTIONS = "?fields=reactions.summary(total_count)";
@@ -350,7 +350,7 @@ namespace FacebookGetLink
                 throw ex;
             }
         }
-        public void GetGroupPosts(string url)
+        public void GetGroupPosts(string url, int delay = 3000)
         {
             HttpRequest http = RequestCustom.GetRequets("","");
             try
@@ -362,7 +362,10 @@ namespace FacebookGetLink
                     processLoading(FacebookAction.POST, groups);
                 if (groups.paging != null)
                     if (groups.paging.next != null)
+                    {
                         GetGroupPosts(groups.paging.next);
+                        Thread.Sleep(delay);
+                    }
                     else
                     {
                         if (complateLoading != null)

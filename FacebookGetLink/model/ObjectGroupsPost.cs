@@ -9,6 +9,7 @@ namespace FacebookGetLink.model
 {
     public class ObjectGroupsPost
     {
+
         public class Post
         {
             public Datum[] data { get; set; }
@@ -25,12 +26,34 @@ namespace FacebookGetLink.model
         {
             public string message { get; set; }
             public string id { get; set; }
-            public string link { get; set; }
-            public string full_picture { get; set; }
-            public string picture { get; set; }
             public DateTime created_time { get; set; }
-            public ReactionCount.Top_Reactions reaction { get; set; }
+            public Reactions reactions { get; set; }
         }
+
+        public class Reactions
+        {
+            public object[] data { get; set; }
+            public Paging1 paging { get; set; }
+            public Summary summary { get; set; }
+        }
+
+        public class Paging1
+        {
+            public Cursors cursors { get; set; }
+            public string next { get; set; }
+        }
+
+        public class Cursors
+        {
+            public string before { get; set; }
+            public string after { get; set; }
+        }
+
+        public class Summary
+        {
+            public int total_count { get; set; }
+        }
+
 
     }
 }
